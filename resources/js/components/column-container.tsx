@@ -10,6 +10,7 @@ import TaskCard from "./task-card";
 
 interface Props {
   column: Column;
+  key: string;
   deleteColumn: (id: Id) => void;
   editColumnName: (id: Id, newName: string) => void;
   createTask: (columnId: Id) => void;
@@ -27,6 +28,7 @@ const ColumnContainer = (props: Props) => {
     tasks,
     removeTask,
     editTask,
+    key
   } = props;
   const [editMode, setEditMode] = useState(false);
 
@@ -51,13 +53,14 @@ const ColumnContainer = (props: Props) => {
   const style = {
     transition,
     transform: CSS.Transform.toString(transform),
-    border: isDragging ? "2px solid #F2C618" : "2px solid #e5e5e5;",
+    border: isDragging ? "2px solid #F2C618" : "2px solid #e1e1e1;",
   };
 
   return (
     <div
       ref={setNodeRef}
       style={style}
+      key={key}
       className="bg-columnBackgroundColor xl:w-[350px] w-[300px] h-[500px] max-h-[500px] rounded-md flex flex-col"
     >
       <div
@@ -69,7 +72,7 @@ const ColumnContainer = (props: Props) => {
           <div className="flex justify-center items-center bg-columnBackgroundColor px-2 py-1 text-sm rounded-full focus-visible:ring-2">
             {tasks?.length}
           </div>
-          {!editMode && column.title}
+          {!editMode && column.name}
 
           {editMode && (
             <input

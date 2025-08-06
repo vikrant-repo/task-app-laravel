@@ -1,5 +1,5 @@
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import {
   DndContext,
   DragEndEvent,
@@ -16,23 +16,11 @@ import { Column, Id, Task } from "@/types";
 import ColumnContainer from "./column-container";
 import TaskCard from "./task-card";
 
-function TaskContainer() {
-  const [columns, setColumns] = useState<Column[]>([
-    {
-      id: generateId(),
-      title: "To Do",
-    },
-    {
-      id: generateId(),
-      title: "In Progress",
-    },
-    {
-      id: generateId(),
-      title: "Done",
-    },
-  ]);
+function TaskContainer(props: { columns: Column[]; createColumn: (data: { name: string }) => void; deleteColumn: (id: Id) => void; updateColumn: (id: Id, name: string) => void }) {
+  const { createColumn, columns, deleteColumn , updateColumn } = props;
+  const debounceTimers = useRef<Record<string, NodeJS.Timeout>>({});
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
-
+console.log('Columns:', columns);
   const [tasks, setTasks] = useState<Task[]>([]);
 
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
@@ -81,10 +69,10 @@ function TaskContainer() {
             <SortableContext items={columnsId}>
               {columns.map((col) => (
                 <ColumnContainer
-                  key={col.id}
+                  key={col.id.toString()}
                   column={col}
                   deleteColumn={deleteColumn}
-                  editColumnName={updateColumn}
+                  editColumnName={updateColumnName}
                   createTask={createTask}
                   removeTask={removeTask}
                   editTask={editTask}
@@ -101,14 +89,13 @@ function TaskContainer() {
               <ColumnContainer
                 column={activeColumn}
                 deleteColumn={deleteColumn}
-                editColumnName={updateColumn}
+                editColumnName={updateColumnName}
                 createTask={createTask}
                 removeTask={removeTask}
                 editTask={editTask}
                 tasks={tasks.filter(
                   (task) => task.columnId === activeColumn.id
-                )}
-              />
+                )} key={""}              />
             )}
             {activeTask && (
               <TaskCard
@@ -127,7 +114,7 @@ function TaskContainer() {
 
   function createTask(columnId: Id) {
     const newTask: Task = {
-      id: generateId(),
+      id: 12,
       columnId,
       content: `Task ${tasks.length + 1}`,
     };
@@ -150,30 +137,18 @@ function TaskContainer() {
   }
 
   function createNewColumn() {
-    const columnToAdd: Column = {
-      id: generateId(),
-      title: `Column ${columns.length + 1}`,
-    };
-
-    setColumns([...columns, columnToAdd]);
+    createColumn({name: `Column ${columns.length + 1}`});
   }
 
-  function deleteColumn(id: Id) {
-    const filteredColumns = columns.filter((col) => col.id !== id);
-    setColumns(filteredColumns);
-
-    const newTasks = tasks.filter((t) => t.columnId !== id);
-    setTasks(newTasks);
+function updateColumnName(id: Id, name: string) {
+  if (debounceTimers.current[id]) {
+    clearTimeout(debounceTimers.current[id]);
   }
-
-  function updateColumn(id: Id, title: string) {
-    const newColumns = columns.map((col) => {
-      if (col.id !== id) return col;
-      return { ...col, title };
-    });
-
-    setColumns(newColumns);
-  }
+  debounceTimers.current[id] = setTimeout(async () => {
+    updateColumn(id, name);
+    delete debounceTimers.current[id];
+  }, 1000);
+}
 
   function onDragStart(event: DragStartEvent) {
     if (event.active.data.current?.type === "Column") {
@@ -202,13 +177,13 @@ function TaskContainer() {
     const isActiveAColumn = active.data.current?.type === "Column";
     if (!isActiveAColumn) return;
 
-    setColumns((columns) => {
-      const activeColumnIndex = columns.findIndex((col) => col.id === activeId);
+    // setColumns((columns) => {
+    //   const activeColumnIndex = columns.findIndex((col) => col.id === activeId);
 
-      const overColumnIndex = columns.findIndex((col) => col.id === overId);
+    //   const overColumnIndex = columns.findIndex((col) => col.id === overId);
 
-      return arrayMove(columns, activeColumnIndex, overColumnIndex);
-    });
+    //   return arrayMove(columns, activeColumnIndex, overColumnIndex);
+    // });
   }
 
   function onDragOver(event: DragOverEvent) {
@@ -253,12 +228,6 @@ function TaskContainer() {
       });
     }
   }
-}
-
-function generateId() {
-  const randomNum = Math.floor(Math.random() * 10000);
-  const timestamp = Date.now();
-  return `${timestamp}-${randomNum}`;
 }
 
 export default TaskContainer;
