@@ -1,8 +1,8 @@
 # 📋 Task App — Laravel 13 + React + Inertia.js
 
-A full-stack task management app built with **Laravel 13** and **React** using **Inertia.js**.  
-Each task is ordered within a category, and you get a simple yet powerful API + UI setup.
-
+1. A full-stack task management app built with **Laravel 13** and **React** using **Inertia.js**.  
+2. Each task is ordered within a category, and you get a simple yet powerful API + UI setup.
+3. Command to import a CSV file with 1000 columns into table
 ---
 
 ## Features
@@ -41,6 +41,11 @@ php artisan migrate --seed
 ### 4. Start Local Server
 ```bash
 composer run dev
+```
+
+### 4. Command to Import CSV
+```bash
+php artisan import:csv storage/app/sample.csv imported_table
 ```
 
 ## API Endpoints
