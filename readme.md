@@ -61,6 +61,16 @@ All requests and responses are in JSON format.All routes are protected by auth:s
 | POST   | `/api/tasks`           | Create a new task            |
 | PUT    | `/api/tasks/{id}`      | Update a task                |
 | DELETE | `/api/tasks/{id}`      | Delete a task                |
+---
+
+## Welcome Page
+<img width="1908" height="935" alt="image" src="https://github.com/user-attachments/assets/a4b59e2f-4b29-4f41-b1af-7795f23538a1" />
+
+## Register and Login
+<img width="1899" height="882" alt="image" src="https://github.com/user-attachments/assets/ade78558-1533-4d9a-a5d6-891f0c304295" />
+
+## Task Page
+<img width="1863" height="936" alt="image" src="https://github.com/user-attachments/assets/a1559edf-1713-435a-8845-f844d552c961" />
 
 
 
