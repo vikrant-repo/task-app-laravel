@@ -7,13 +7,14 @@ import { Id, Task } from "@/types";
 interface TaskBarProps {
   task: Task;
   removeTask: (id: Id) => void;
-  editTask: (id: Id, task: string) => void;
+  editTask: (id: Id, title: string, column_id: Id) => void;
 }
 
 const TaskCard = (props: TaskBarProps) => {
   const [mouseIsOver, setMouseIsOver] = useState(false);
   const [editTaskMode, setEditTaskMode] = useState(false);
   const { task, removeTask, editTask } = props;
+   const [taskVal, setTaskVal] = useState(task.title);
 
   const {
     setNodeRef,
@@ -56,8 +57,8 @@ const TaskCard = (props: TaskBarProps) => {
           className="focus:border-gradientBorder border rounded outline-none px-2 focus-visible:ring-2 focus-visible:ring-gradientBorder focus-visible:outline-none focus:ring-offset-0"
           type="text"
           autoFocus
-          value={task.content}
-          onChange={(e) => editTask(task.id, e.target.value)}
+          value={taskVal}
+          onChange={(e) => {setTaskVal(e.target.value);editTask(task.id, e.target.value,task.column_id)}}
           onBlur={() => setEditTaskMode(false)}
           onKeyDown={(e) => {
             if (e.key !== "Enter") return;
@@ -78,14 +79,14 @@ const TaskCard = (props: TaskBarProps) => {
       onMouseLeave={() => setMouseIsOver(false)}
     >
       <div>
-        {!editTaskMode && task.content}
+        {!editTaskMode && task.title}
         {editTaskMode && (
           <input
             className="focus:border-gradientBorder focus:active:border-gradientColor border rounded outline-none px-2"
             type="text"
             autoFocus
-            value={task.content}
-            onChange={(e) => editTask(task.id, e.target.value)}
+            value={taskVal}
+            onChange={(e) => {setTaskVal(e.target.value);editTask(task.id, e.target.value,task.column_id)}}
             onBlur={() => setEditTaskMode(false)}
             onKeyDown={(e) => {
               if (e.key !== "Enter") return;

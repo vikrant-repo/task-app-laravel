@@ -9,13 +9,26 @@ use App\Models\Task;
 
 class TaskOperationsController extends Controller
 {
-    public function index(): JsonResponse {
-        return response()->json(Task::all());
+    public function index(Request $request): JsonResponse {
+        $user = $request->user();
+        $userId = $user->id;
+        $tasks = Task::where('user_id', $userId)->get();
+        return response()->json($tasks);
     }
 
-    public function store(Request $request): JsonResponse {
-        $task = Task::create($request->all());
-        return response()->json($task, 201);
+      public function store(Request $request): JsonResponse {
+        $user = $request->user();
+        $userId = $user->id;
+        $validated = $request->validate([
+            'title' => 'required|string',
+            'column_id' => 'required|exists:columns,id'
+        ]);
+        $column = Task::create([
+            'title' => $validated['title'],
+            'column_id' => $validated['column_id'],
+            'user_id' => $userId,
+        ]);
+        return response()->json($column, 201);
     }
 
     public function show($id) {
@@ -30,6 +43,6 @@ class TaskOperationsController extends Controller
 
     public function destroy($id) {
         Task::destroy($id);
-        return response()->json(null, 204);
+        return response()->json(['message' => 'Deleted']);
     }
 }

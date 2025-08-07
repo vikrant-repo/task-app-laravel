@@ -1,69 +1,61 @@
-Task App Laravel API
-A simple REST API for managing categories and tasks, built with Laravel. Tasks can be ordered within categories.
+# 📋 Task App — Laravel 13 + React + Inertia.js
 
-Features
-CRUD operations for Categories and Tasks
+A full-stack task management app built with **Laravel 13** and **React** using **Inertia.js**.  
+Each task is ordered within a category, and you get a simple yet powerful API + UI setup.
 
-Each Task belongs to a Category and has a position/order
+---
 
-Categories return their list of Tasks, ordered by position
+## Features
 
-Basic request validation
+- CRUD operations for **Categories** and **Tasks**
+- Each task has a **position/order** and belongs to a category
+- Categories return their tasks **ordered by position**
+- Basic request validation
+---
 
-Seed fake initial data with factories
+## Requirements
 
-Requirements
-PHP ≥ 8.1
+- PHP ≥ 8.1  
+- Composer  
+- SQLite (or any other supported DB)  
+- Node.js & npm *(for frontend build)*
 
-Composer
+---
 
-MySQL or compatible database
+## Getting Started
 
-Node.js & npm (if using front-end assets or Laravel Mix)
+### 1. Clone the Repository
 
-Getting Started
-1. Clone the repository
-bash
+```bash
 git clone https://github.com/vikrant-repo/task-app-laravel.git
 cd task-app-laravel
-2. Install dependencies
-bash
+```
+### 2. PHP Dependencies
+```bash
 composer install
-3. Configure environment
-Copy the example environment file, then edit .env and set your database credentials:
-
-bash
-cp .env.example .env
-4. Generate application key
-bash
-php artisan key:generate
-5. Run migrations and seeders
-bash
+```
+### 3. Migration
+```bash
 php artisan migrate --seed
-6. (Optional) Build frontend assets
-If needed for your setup:
+```
+### 4. Start Local Server
+```bash
+composer run dev
+```
 
-bash
-npm install
-npm run dev
-7. Start the local server
-bash
-php artisan serve
-The API will be live at http://127.0.0.1:8000.
+## API Endpoints
 
-API Endpoints
-Method	Endpoint	Description
-GET	/api/categories	List categories with their tasks
-POST	/api/categories	Create a new category
-PUT	/api/categories/{id}	Update a category
-DELETE	/api/categories/{id}	Delete a category
-POST	/api/tasks	Create a new task
-PUT	/api/tasks/{id}	Update a task
-DELETE	/api/tasks/{id}	Delete a task
-All requests and responses are JSON.
+All requests and responses are in JSON format.All routes are protected by auth:sanctum
 
-Seeding Data
-Running php artisan migrate --seed creates sample categories and tasks using model factories.
+| Method | Endpoint               | Description                  |
+|--------|------------------------|------------------------------|
+| GET    | `/api/categories`      | List categories (with tasks) |
+| POST   | `/api/categories`      | Create a new category        |
+| PUT    | `/api/categories/{id}` | Update a category            |
+| DELETE | `/api/categories/{id}` | Delete a category            |
+| POST   | `/api/tasks`           | Create a new task            |
+| PUT    | `/api/tasks/{id}`      | Update a task                |
+| DELETE | `/api/tasks/{id}`      | Delete a task                |
 
-License
-This project is open-sourced under the MIT license.
+
+

@@ -9,8 +9,11 @@ use App\Models\Column;
 
 class ColumnOperationController extends Controller
 {
-    public function index(): JsonResponse {
-        return response()->json(Column::all());
+     public function index(Request $request): JsonResponse {
+        $user = $request->user();
+        $userId = $user->id;
+        $data = Column::where('user_id', $userId)->get();
+        return response()->json($data);
     }
 
     public function store(Request $request): JsonResponse {

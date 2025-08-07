@@ -13,10 +13,10 @@ interface Props {
   key: string;
   deleteColumn: (id: Id) => void;
   editColumnName: (id: Id, newName: string) => void;
-  createTask: (columnId: Id) => void;
+  createTask: (column_id: Id) => void;
   tasks: Task[];
   removeTask: (id: Id) => void;
-  editTask: (id: Id, task: string) => void;
+  editTask: (id: Id, title: string, column_id: Id) => void;
 }
 
 const ColumnContainer = (props: Props) => {
